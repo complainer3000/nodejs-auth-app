@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration and Login</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .navbar { background-color: #333; color: white; padding: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .navbar img { height: 40px; border-radius: 50%; margin-right: 10px; }
+    </style>
+</head>
+<body>
+    <div class="navbar" id="navbar">
+        <span id="user-info"></span>
+    </div>
+
+    <h2>Register</h2>
+    <form id="register-form">
+        <input type="text" name="username" placeholder="Username" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <button type="submit">Register</button>
+    </form>
+
+    <h2>Login</h2>
+    <form id="login-form">
+        <input type="text" name="username" placeholder="Username" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <button type="submit">Login</button>
+    </form>
+
+    <h2>Upload Avatar</h2>
+    <form id="upload-avatar-form" enctype="multipart/form-data">
+        <input type="file" name="avatar" accept="image/*" required>
+        <button type="submit">Upload Avatar</button>
+    </form>
+
+    <script>
+        document.getElementById('register-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const response = await fetch('/register', { method: 'POST', body: formData });
+            alert(await response.text());
+        });
+
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const response = await fetch('/login', { method: 'POST', body: formData });
+            const result = await response.json();
+            if (result.message === 'Login successful') {
+                document.getElementById('user-info').innerHTML = `<img src="${result.avatarPath}" alt="Avatar"> ${result.username}`;
+            } else {
+                alert(result.message);
+            }
+        });
+
+        document.getElementById('upload-avatar-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const response = await fetch('/upload-avatar/1', { method: 'POST', body: formData });
+            alert(await response.text());
+        });
+    </script>
+</body>
+</html>
