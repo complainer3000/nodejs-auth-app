@@ -19,6 +19,7 @@
     <form id="register-form">
         <input type="text" name="username" placeholder="Username" required>
         <input type="password" name="password" placeholder="Password" required>
+        <input type="text" name="avatar" placeholder="Avatar URL (optional)">
         <button type="submit">Register</button>
     </form>
 
@@ -27,12 +28,6 @@
         <input type="text" name="username" placeholder="Username" required>
         <input type="password" name="password" placeholder="Password" required>
         <button type="submit">Login</button>
-    </form>
-
-    <h2>Upload Avatar</h2>
-    <form id="upload-avatar-form" enctype="multipart/form-data">
-        <input type="file" name="avatar" accept="image/*" required>
-        <button type="submit">Upload Avatar</button>
     </form>
 
     <script>
@@ -49,17 +44,10 @@
             const response = await fetch('/login', { method: 'POST', body: formData });
             const result = await response.json();
             if (result.message === 'Login successful') {
-                document.getElementById('user-info').innerHTML = `<img src="${result.avatarPath}" alt="Avatar"> ${result.username}`;
+                document.getElementById('user-info').innerHTML = `<img src="${result.avatar}" alt="Avatar"> ${result.username}`;
             } else {
                 alert(result.message);
             }
-        });
-
-        document.getElementById('upload-avatar-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const formData = new FormData(e.target);
-            const response = await fetch('/upload-avatar/1', { method: 'POST', body: formData });
-            alert(await response.text());
         });
     </script>
 </body>
